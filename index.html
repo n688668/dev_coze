@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PROVIEW AI Assistant</title>
     <style>
-        /* Đảm bảo trang web không có khoảng trắng thừa và không thể cuộn ngoài khung chat */
+        /* Loại bỏ mọi khoảng trống của trình duyệt */
         body,
         html {
             margin: 0;
@@ -14,47 +14,50 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #f4f7f9;
+            background-color: #ffffff;
         }
 
-        /* Container này sẽ chứa khung chat toàn màn hình */
+        /* Khung chứa chat chiếm toàn bộ màn hình */
         #coze-chat-container {
-            width: 100vw;
+            width: 100%;
             height: 100vh;
+        }
+
+        /* Tùy chỉnh để ẩn các thành phần thừa nếu SDK tự sinh ra */
+        .coze-client-widget-container {
+            width: 100% !important;
+            height: 100% !important;
         }
     </style>
 </head>
 
 <body>
-    <!-- Khu vực hiển thị khung chat -->
+    <!-- Đây là nơi khung chat sẽ hiển thị trực tiếp -->
     <div id="coze-chat-container"></div>
 
     <script
         src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/1.2.0-beta.6/libs/oversea/index.js"></script>
 
     <script>
-        // Khởi tạo Coze Web Chat Client
-        const chatClient = new CozeWebSDK.WebChatClient({
-            config: {
-                bot_id: '7585388939940675589', // Bot ID của bạn
-                isIframe: false,
-            },
-            componentProps: {
-                title: 'PROVIEW AI Assistant',
-                // Chế độ layout 'drawer' hoặc cố định container giúp hiển thị toàn màn hình tốt hơn
-            },
-            auth: {
-                type: 'token',
-                token: 'pat_NyVDI0cgXCG0BVJtBRRt4zhAdhcMeBHErketQAEIRyec3MLQfk0EuZU8dKnMjFml',
-                onRefreshToken: function () {
-                    return 'pat_NyVDI0cgXCG0BVJtBRRt4zhAdhcMeBHErketQAEIRyec3MLQfk0EuZU8dKnMjFml';
+        document.addEventListener('DOMContentLoaded', () => {
+            new CozeWebSDK.WebChatClient({
+                config: {
+                    bot_id: '7585388939940675589',
+                },
+                container: document.getElementById('coze-chat-container'), // Gắn trực tiếp vào div
+                componentProps: {
+                    title: 'PROVIEW AI Assistant',
+                    layout: 'inline', // Quan trọng: Hiển thị trực tiếp thay vì dạng bong bóng (bubble)
+                },
+                auth: {
+                    type: 'token',
+                    token: 'pat_NyVDI0cgXCG0BVJtBRRt4zhAdhcMeBHErketQAEIRyec3MLQfk0EuZU8dKnMjFml',
+                    onRefreshToken: function () {
+                        return 'pat_NyVDI0cgXCG0BVJtBRRt4zhAdhcMeBHErketQAEIRyec3MLQfk0EuZU8dKnMjFml';
+                    }
                 }
-            }
+            });
         });
-
-        // Gọi hàm hiển thị ngay khi script sẵn sàng
-        // Lưu ý: Tùy phiên bản SDK, bạn có thể cần chỉ định container để nó bung toàn màn hình
-        // Ở đây chúng ta sử dụng phương thức mặc định của Coze SDK để chiếm lĩnh giao diện
     </script>
 </body>
 
